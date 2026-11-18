@@ -13,6 +13,7 @@ import { Map, setRTLTextPlugin } from 'maplibre-gl';
 import type ObsidianMapsPlugin from './main';
 import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from './map/constants';
 import { CustomZoomControl } from './map/controls/zoom-control';
+import { QuickActionsControl } from './map/controls/quick-actions';
 import { CustomGeolocateControl } from './map/controls/geolocate-control';
 import { BackgroundSwitcherControl } from './map/controls/background-switcher';
 import { StyleManager } from './map/style';
@@ -21,6 +22,7 @@ import { MarkerManager } from './map/markers';
 import { MapConfig } from './map/types';
 import { hasOwnProperty, coordinateFromValue, toLngLat, roundCoordinate, formatCoordinates, sameCoordinates } from './map/utils';
 import { rtlPluginCode } from './map/rtl-plugin-code';
+import { addFormMenuItems } from './form-menu';
 
 export const MapViewType = 'map';
 
@@ -55,7 +57,6 @@ export class MapView extends BasesView {
 	private popupManager: PopupManager;
 	private markerManager: MarkerManager;
 
-	// Static flag to track RTL plugin initialization
 	private static rtlPluginInitialized = false;
 
 	constructor(controller: QueryController, scrollEl: HTMLElement, plugin: ObsidianMapsPlugin) {
@@ -75,7 +76,8 @@ export class MapView extends BasesView {
 			(path, newLeaf) => void this.app.workspace.openLinkText(path, '', newLeaf),
 			() => this.data,
 			() => this.mapConfig,
-			(prop) => this.config.getDisplayName(prop)
+			(prop) => this.config.getDisplayName(prop),
+			(menu, coordinates) => addFormMenuItems(this.app, menu, this.plugin.settings, this.coordinateValues(coordinates))
 		);
 	}
 
@@ -145,14 +147,10 @@ export class MapView extends BasesView {
 	private async initializeMap(): Promise<void> {
 		if (this.map) return;
 
-		// Initialize RTL text plugin once
 		if (!MapView.rtlPluginInitialized) {
 			try {
-				// Create a blob URL from the bundled RTL plugin code
-				// The plugin needs to run in a worker context
 				const blob = new Blob([rtlPluginCode], { type: 'application/javascript' });
 				const blobURL = URL.createObjectURL(blob);
-				// Set lazy loading to false - plugin is initialized since code is already bundled
 				void setRTLTextPlugin(blobURL, false);
 				MapView.rtlPluginInitialized = true;
 			} catch (error) {
@@ -197,6 +195,7 @@ export class MapView extends BasesView {
 		this.popupManager.setMap(this.map);
 		this.markerManager.setMap(this.map);
 
+		this.map.addControl(new QuickActionsControl(this.plugin), 'top-right');
 		this.map.addControl(new CustomZoomControl(), 'top-right');
 
 		// Desktop Electron grants the geolocation permission but has no location
@@ -613,6 +612,15 @@ export class MapView extends BasesView {
 				this.config.set('defaultZoom', currentZoom);
 			})
 		);
+
+		addFormMenuItems(this.app, menu, this.plugin.settings, this.coordinateValues([currentLat, currentLng]));
+	}
+
+	private coordinateValues(coordinates: [number, number]): Record<string, unknown> {
+		const property = this.mapConfig?.coordinatesProp;
+		const value = coordinates.map(coordinate => coordinate.toString());
+		if (!property) return { coordinates: value };
+		return { [property.startsWith('note.') ? property.slice(5) : property]: value };
 	}
 
 	public setEphemeralState(state: unknown): void {

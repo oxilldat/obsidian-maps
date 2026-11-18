@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-maps",
-	"version": "0.2.2",
-	"description": "Adds map view to Obsidian Bases.",
+	"name": "oxill-maps",
+	"version": "0.1.0",
+	"description": "Interactive Obsidian Bases map with configurable actions.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node scripts/generate-rtl-plugin.mjs && node esbuild.config.mjs",
@@ -15,8 +15,8 @@
 		"maps",
 		"bases"
 	],
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"author": "oxill",
+	"authorUrl": "https://github.com/oxilldat",
 	"license": "MIT",
 	"devDependencies": {
 		"@eslint/js": "^9.39.5",

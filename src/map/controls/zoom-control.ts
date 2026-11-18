@@ -5,7 +5,7 @@ export class CustomZoomControl implements IControl {
 	private containerEl: HTMLElement;
 
 	constructor() {
-		this.containerEl = createDiv('maplibregl-ctrl maplibregl-ctrl-group canvas-control-group mod-raised');
+		this.containerEl = createDiv('maplibregl-ctrl oxm-zoom-control');
 	}
 
 	onAdd(map: Map): HTMLElement {

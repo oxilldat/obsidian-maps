@@ -1,38 +1,39 @@
-Adds a [map layout](https://obsidian.md/help/bases/views/map) to [Obsidian Bases](https://obsidian.md/help/bases) so you can display notes as an interactive map view.
+# Oxill Maps
 
-![Map view for Obsidian Bases](/images/map-view.png)
+Oxill Maps adds an interactive map view to Obsidian Bases. Notes with a coordinate property become markers, while map and marker clicks can create notes, open notes, run Obsidian commands, or launch an Oxill Forms form.
 
-- Dynamically display markers that match your filters.
-- Use marker icons and colors defined by properties.
-- Load custom background tiles.
-- Define default zoom options.
+## Features
+
+- Native Bases map view on desktop and mobile.
+- Configurable map backgrounds.
+- Configurable quick-action button in the top-right corner.
+- Separate, optional Oxill Forms connector with coordinate prefilling.
+- Local-first operation with no telemetry.
 
 ## Installation
 
-1. Open **Settings → Community plugins**.
-2. Select **Browse**, then search for **Maps**.
-3. Select **Install**, then **Enable**.
+### Manual / BRAT
+
+Download `main.js`, `manifest.json`, and `styles.css` from the release and place them in:
+
+```text
+<vault>/.obsidian/plugins/oxill-maps/
+```
+
+Reload Obsidian and enable **Oxill Maps** in Community plugins.
 
 ## Usage
 
-Add a coordinates property to each note you want to appear on the map. Both a text property and a list property work:
+Create a Base, add the **Oxill Maps** view, and select the note property containing coordinates. Coordinates use the `[latitude, longitude]` format.
 
-```yaml
-location: 34.13956, -118.38710
-```
+Configure backgrounds, commands, and forms under **Settings → Community plugins → Oxill Maps**. Oxill Forms integration is optional; it only becomes active when the `oxill-forms` plugin and its public API are available.
 
-```yaml
-location:
-  - 34.13956
-  - -118.38710
-```
+## Privacy and compatibility
 
-Then open a base, add a view, and set its type to **Map**. In the view options, set **Marker coordinates** to your property. Markers appear for every note matching the view's filters, and update as those filters change.
+Oxill Maps does not collect telemetry or send note contents anywhere. Map tile providers configured by the user receive normal tile requests. The command connector uses Obsidian's command manager, which is not part of the stable public API and may require compatibility updates after Obsidian releases.
 
-The remaining view options let you set the center coordinates, default zoom, and zoom limits, and choose properties to drive each marker's icon and color.
+## Credits and license
 
-### Backgrounds
+Oxill Maps is based on [Obsidian Maps](https://github.com/obsidianmd/obsidian-maps) 0.2.2 by Obsidian. Both projects are licensed under the MIT License; see [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-Maps use [OpenFreeMap](https://openfreemap.org) tiles by default. To use different tiles, go to **Settings → Maps** and add a background with a tile URL or style URL. You can set a separate URL for dark mode.
-
-See the [full documentation](https://obsidian.md/help/bases/views/map) on the Obsidian Help site for examples, tips, and troubleshooting.
+Author: [oxill](https://github.com/oxilldat)

@@ -29,6 +29,7 @@ export class MarkerManager {
 	private getData: () => MarkerData | null;
 	private getMapConfig: () => MapConfig | null;
 	private getDisplayName: (prop: BasesPropertyId) => string;
+	private addFormItems: (menu: Menu, coordinates: [number, number]) => void;
 
 	constructor(
 		app: App,
@@ -37,7 +38,8 @@ export class MarkerManager {
 		onOpenFile: (path: string, newLeaf: boolean) => void,
 		getData: () => MarkerData | null,
 		getMapConfig: () => MapConfig | null,
-		getDisplayName: (prop: BasesPropertyId) => string
+		getDisplayName: (prop: BasesPropertyId) => string,
+		addFormItems: (menu: Menu, coordinates: [number, number]) => void
 	) {
 		this.app = app;
 		this.mapEl = mapEl;
@@ -46,6 +48,7 @@ export class MarkerManager {
 		this.getData = getData;
 		this.getMapConfig = getMapConfig;
 		this.getDisplayName = getDisplayName;
+		this.addFormItems = addFormItems;
 	}
 
 	setMap(map: MapLibreMap | null): void {
@@ -433,6 +436,7 @@ export class MarkerManager {
 
 			const menu = Menu.forEvent(e.originalEvent);
 			this.app.workspace.handleLinkContextMenu(menu, file.path, '');
+			this.addFormItems(menu, markerData.coordinates);
 
 			// Add copy coordinates option
 			menu.addItem(item => item

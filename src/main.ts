@@ -3,14 +3,14 @@ import { MapView } from './map-view';
 import { MapSettings, DEFAULT_SETTINGS, MapSettingTab } from './settings';
 import { GEOLOCATION_OPTIONS, geolocationErrorMessage } from './map/utils';
 
-export default class ObsidianMapsPlugin extends Plugin {
+export default class OxillMapsPlugin extends Plugin {
 	settings: MapSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		this.registerBasesView('map', {
-			name: 'Map',
+			name: 'Oxill Maps',
 			icon: 'lucide-map',
 			factory: (controller, containerEl) => new MapView(controller, containerEl, this),
 			options: () => MapView.getViewOptions(),
@@ -32,7 +32,14 @@ export default class ObsidianMapsPlugin extends Plugin {
 
 	async loadSettings() {
 		const data = await this.loadData() as Partial<MapSettings> | null;
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+		this.settings = {
+			...DEFAULT_SETTINGS,
+			...data,
+			tileSets: Array.isArray(data?.tileSets) ? data.tileSets : [],
+			quickActions: Array.isArray(data?.quickActions) ? data.quickActions : [],
+			formConnectorEnabled: data?.formConnectorEnabled === true,
+			formActions: Array.isArray(data?.formActions) ? data.formActions : [],
+		};
 	}
 
 	async saveSettings() {
