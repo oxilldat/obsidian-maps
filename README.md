@@ -1,13 +1,13 @@
 # Oxill Maps
 
-Oxill Maps adds an interactive map view to Obsidian Bases. Notes with a coordinate property become markers, while map and marker clicks can create notes, open notes, run Obsidian commands, or launch an Oxill Forms form.
+Oxill Maps adds an interactive map view to Obsidian Bases. Notes with a coordinate property become markers; left-click opens a note, while the context menu can create notes and launch configured Oxill Forms forms with coordinates.
 
 ## Features
 
 - Native Bases map view on desktop and mobile.
 - Configurable map backgrounds.
-- Configurable quick-action button in the top-right corner.
-- Separate, optional Oxill Forms connector with coordinate prefilling.
+- Configurable command buttons with selectable icons in the top-right corner.
+- Separate, optional Oxill Forms connector that adds configured forms to map context menus and prefills coordinates.
 - Local-first operation with no telemetry.
 
 ## Installation
